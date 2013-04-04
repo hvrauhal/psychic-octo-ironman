@@ -21,7 +21,8 @@ net.createServer(function (socket) {
  
   // Handle incoming messages from clients.
   socket.on('data', function (data) {
-    broadcast(socket.name + "> " + data, socket);
+    var line = JSON.parse(data)
+    broadcast(socket.name + " "  + line.author + "> " + line.text, socket);
   });
  
   // Remove the client from the list when it leaves
@@ -38,7 +39,7 @@ net.createServer(function (socket) {
       client.write(message);
     });
     // Log it to the server output too
-    process.stdout.write(message)
+    process.stdout.write(message + '\n')
   }
  
 }).listen(5000);
