@@ -1,0 +1,14 @@
+{
+  "name": "koodileiriserveri",
+  "version": "0.0.1",
+  "description": "Has a socket",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "async": "~0.2.5",
+    "lodash": "~1.0.1",
+    "net": "~1.0.0"
+  }
+}
