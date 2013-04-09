@@ -2,14 +2,15 @@
   "name": "koodileiriserveri",
   "version": "0.0.1",
   "description": "Has a socket",
-  "main": "server.js",
+  "main": "out/server.ls",
   "scripts": {
-    "start": "node server.js"
+    "start": "lsc -co out src  && node out/server.js"
   },
   "dependencies": {
     "async": "~0.2.5",
     "lodash": "~1.0.1",
     "net": "~1.0.0",
-    "LiveScript": "~1.1.1"
+    "LiveScript": "~1.1.1",
+    "prelude-ls": "~0.6.0"
   }
 }
