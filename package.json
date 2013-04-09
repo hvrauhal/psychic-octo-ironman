@@ -9,6 +9,7 @@
   "dependencies": {
     "async": "~0.2.5",
     "lodash": "~1.0.1",
-    "net": "~1.0.0"
+    "net": "~1.0.0",
+    "LiveScript": "~1.1.1"
   }
 }
