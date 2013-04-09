@@ -1,6 +1,6 @@
 global <<< require \prelude-ls
 net = require('net')
-
+    
 clients = []
 
 server = net.createServer (socket) ->
@@ -15,8 +15,8 @@ server = net.createServer (socket) ->
 
     socket.on 'data', (data) ->
         line = JSON.parse(data)
-        broadcast(socket.name + " "  + line.author + "> " + line.text, socket)
-// {"author" : "kuikkeloinen", "text": "Helloworld"}
+        broadcast(socket.name + " "  + line.author +     "> " + line.text, socket)
+# {"author" : "kuikkeloinen", "text": "Helloworld"} 
 
     socket.on 'end', ->
         clients.splice(clients.indexOf(socket), 1)
