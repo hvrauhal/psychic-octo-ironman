@@ -9,7 +9,9 @@ client.connect 5000, 'localhost', ->
                     "abcd" + i).join(' ')
        client.write(JSON.stringify({author: client.address().address + ":" + client.address().port, text: longText }) + '\n')
 
-client.on 'close' -> console.log 'closed'
+client.on 'close' -> 
+  console.log 'closed'
+  process.exit()
 handlePartial = (oldData, newData) --> 
   msg = oldData + newData
   if 10 == msg.charCodeAt(msg.length-1)
