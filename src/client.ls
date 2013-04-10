@@ -10,12 +10,15 @@ client.connect 5000, 'localhost', ->
        client.write(JSON.stringify({author: client.address().address + ":" + client.address().port, text: longText }) + '\n')
 
 client.on 'close' -> console.log 'closed'
-msg = ''
-client.on 'data', (data) ->
-              msg += data
-              if 10 == msg.charCodeAt(msg.length-1)
-                 client.emit 'message', msg.substring(0, msg.length-1)
-                 msg := ''
+handlePartial = (oldData, newData) --> 
+  msg = oldData + newData
+  if 10 == msg.charCodeAt(msg.length-1)
+    client.emit 'message', msg.substring(0, msg.length-1)
+    client.once 'data', handlePartial ''
+  else 
+    client.once 'data', handlePartial msg
+
+client.once 'data', handlePartial ''
 
 client.on 'message' (data) ->
           m = JSON.parse data

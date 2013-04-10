@@ -14,12 +14,15 @@ server = net.createServer (socket) ->
 
     socket.setEncoding 'utf8'
 
-    msg = ''
-    socket.on 'data', (data) ->
-      msg += data
+    handlePartial = (oldData, newData) --> 
+      msg = oldData + newData
       if 10 == msg.charCodeAt(msg.length-1)
         socket.emit 'message', msg.substring(0, msg.length-1)
-        msg := ''
+        socket.once 'data', handlePartial ''
+      else 
+        socket.once 'data', handlePartial msg
+
+    socket.once 'data', handlePartial ''
 
     socket.on 'message', (data) ->
       line = JSON.parse(data)
