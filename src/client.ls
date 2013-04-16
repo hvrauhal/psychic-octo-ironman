@@ -1,24 +1,20 @@
 global <<< require \prelude-ls
-net = require('net')
+require! \net
+require! './common.js'
 
 client = new net.Socket
+
 client.connect 5000, 'localhost', ->
        console.log 'connected'
        client.setEncoding 'utf8'
-       longText = (for i from 1 to 100000
-                    "abcd" + i).join(' ')
-       client.write(JSON.stringify({author: client.address().address + ":" + client.address().port, text: longText }) + '\n')
+       {author: 'kuikelo', text: 'hello'} |> common.toMessage |> client.write
+
 
 client.on 'close' -> 
   console.log 'closed'
   process.exit()
-handlePartial = (oldData, newData) --> 
-  msg = oldData + newData
-  if 10 == msg.charCodeAt(msg.length-1)
-    client.emit 'message', msg.substring(0, msg.length-1)
-    client.once 'data', handlePartial ''
-  else 
-    client.once 'data', handlePartial msg
+
+handlePartial = common.handlePartial(client)
 
 client.once 'data', handlePartial ''
 
