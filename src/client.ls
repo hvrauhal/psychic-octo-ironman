@@ -1,6 +1,7 @@
 global <<< require \prelude-ls
 require! \net
 require! './common.js'
+require! events.EventEmitter
 
 client = new net.Socket
 
@@ -17,16 +18,16 @@ handlePartial = common.handlePartial(client)
 
 client.once 'data', handlePartial ''
 
+ai = new EventEmitter
+
 client.on 'message', (data) ->
   m = JSON.parse data
-  type = if m.msgType === 'end' then 'endMesg' else m.msgType
-  client.emit type, m.data
+  ai.emit m.msgType, m.data
 
 beef = (state) ->
   console.log 'got gamestate', state
 
-client.on 'gamestate', beef
-
-client.on 'start', (startInfo) -> console.log 'starting with:', startInfo
-client.on 'endMesg', (endData) -> console.log 'ending with:', endData
-client.on 'initialize', (initializeData) -> console.log 'initializing with:', initializeData
+ai.on 'gamestate', beef
+ai.on 'start', (startInfo) -> console.log 'starting with:', startInfo
+ai.on 'endMesg', (endData) -> console.log 'ending with:', endData
+ai.on 'initialize', (initializeData) -> console.log 'initializing with:', initializeData
