@@ -1,7 +1,21 @@
 global <<< require \prelude-ls
-require! \net
-require! './common.js'
+require! net
 require! events.EventEmitter
+require! './common.js'
+require! express
+
+app = express()
+server = require('http').createServer(app)
+io = require('socket.io').listen(server)
+
+server.listen(12345)
+
+app.use(express.static(__dirname + '/../public'))
+
+
+visualisators = []
+io.sockets.on 'connection', (socket) ->
+  visualisators  ++=  socket
 
 client = new net.Socket
 
@@ -12,7 +26,7 @@ client.connect 5000, 'localhost', ->
 
 client.on 'close' -> 
   console.log 'closed'
-  process.exit()
+#  process.exit()
 
 handlePartial = common.handlePartial(client)
 
@@ -26,6 +40,7 @@ client.on 'message', (data) ->
 
 beef = (state) ->
   console.log 'got gamestate', state
+  visualisators |> each (.emit 'gamestate', state)
 
 ai.on 'gamestate', beef
 ai.on 'start', (startInfo) -> console.log 'starting with:', startInfo
