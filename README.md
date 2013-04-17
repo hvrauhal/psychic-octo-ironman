@@ -1,4 +1,4 @@
-Install dependencies `npm install && npm install -G LiveScript prelude-ls`
+Install dependencies `npm install`
 
 Start server with `npm start`
 

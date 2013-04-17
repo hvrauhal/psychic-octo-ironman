@@ -4,7 +4,7 @@
   "description": "Has a socket",
   "main": "out/server.ls",
   "scripts": {
-    "start": "lsc -co out src  && node out/server.js"
+    "start": "./server.sh"
   },
   "dependencies": {
     "async": "~0.2.5",

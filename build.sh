@@ -1,2 +1,2 @@
 #!/bin/sh
-lsc --watch -o out src
+./node_modules/.bin/lsc --watch -o out src
