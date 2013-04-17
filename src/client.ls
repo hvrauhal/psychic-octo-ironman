@@ -3,30 +3,37 @@ require! net
 require! events.EventEmitter
 require! './common.js'
 require! express
+require! open
 
 app = express()
 server = require('http').createServer(app)
 io = require('socket.io').listen(server)
+io.set 'log level', 1
 
-server.listen(12345)
+server.listen(0)
+visualizationAddress = "http://localhost:#{server.address().port}/"
+console.log "Visualization available at #{visualizationAddress}"
+open(visualizationAddress)
 
 app.use(express.static(__dirname + '/../public'))
-
-
-visualisators = []
-io.sockets.on 'connection', (socket) ->
-  visualisators  ++=  socket
+app.use(express.static(__dirname + '/../out'))
 
 client = new net.Socket
 
 client.connect 5000, 'localhost', ->
        console.log 'connected'
        client.setEncoding 'utf8'
+
+visualisators = []
+io.sockets.on 'connection', (socket) ->
+       console.log 'has visualization, joining the game'
+       visualisators ++= socket
        {msgType: 'join'} |> common.toMessage |> client.write
 
-client.on 'close' -> 
+client.on 'close' ->
   console.log 'closed'
-#  process.exit()
+  visualisators |> each (.close)
+  process.exit()
 
 handlePartial = common.handlePartial(client)
 
